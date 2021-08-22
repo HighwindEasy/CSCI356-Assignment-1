@@ -60,9 +60,13 @@ public class Player : MonoBehaviour
                 StopCoroutine(infinityStaminaC);
                 infinityStaminaC = null;
             }
-            if (thePlayer.m_IsWalking == false)
+            if (thePlayer.isSprinting == true)
             {
                 currentStamina -= (10 * Time.deltaTime);
+                if(currentStamina <= 0)
+                {
+                    thePlayer.isSprinting = false;
+                }
             }
             else
             {

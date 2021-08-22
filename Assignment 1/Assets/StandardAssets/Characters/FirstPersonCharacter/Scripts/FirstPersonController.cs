@@ -42,6 +42,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+        Player thePlayer;
+        public bool isSprinting;
 
         // Use this for initialization
         private void Start()
@@ -56,6 +58,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+            thePlayer = GetComponent<Player>();
+            isSprinting = false;
         }
 
 
@@ -216,8 +220,26 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_IsWalking = !Input.GetKey(KeyCode.LeftShift);
 #endif
             // set the desired speed to be walking or running
-            speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
+            
+           if(!m_IsWalking)
+           {
+                if (thePlayer.currentStamina <= 0)
+                {
+                    isSprinting = false;
+                }
+                else
+                {
+                    isSprinting = true;
+                }
+           }
+           else
+            {
+                isSprinting = false;
+            }
+            speed = isSprinting ? m_RunSpeed : m_WalkSpeed;
             m_Input = new Vector2(horizontal, vertical);
+
+           
 
             // normalize input if it exceeds 1 in combined length:
             if (m_Input.sqrMagnitude > 1)
